@@ -1,0 +1,103 @@
+html,
+body {
+  line-height: 1.5;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+header,
+.input-area {
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  background-color: rgb(150, 55, 18);
+  color: whitesmoke;
+  font-size: 1.95em;
+  font-weight: bold;
+  text-align: center;
+  padding: 1% 4%;
+}
+
+.list-input {
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: thin solid rgb(230, 225, 225);
+  font-size: inherit;
+}
+
+.list-input:hover {
+  background-color: rgb(250, 246, 246);
+}
+
+.input-button {
+  border: none;
+  font-size: 1rem;
+  padding: 0.2rem;
+  position: relative;
+  top: 0.18rem;
+  background-color: white;
+  cursor: pointer;
+  transform: all 0.3s ease;
+}
+
+.fa-plus-circle {
+  font-size: 160%;
+  color: rgb(32, 173, 32);
+}
+
+.fa-plus-circle:hover {
+  color: rgb(43, 116, 43);
+}
+
+.shoplist-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.shoplist-div {
+  min-width: 30%;
+}
+
+.list-div {
+  margin: 0.5rem 0 0.5rem 0;
+  background: rgb(253, 247, 247);
+  font-size: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.checkbox-label {
+  flex: 1;
+  padding-left: 0.8rem;
+}
+
+.delete-input {
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: rgb(253, 247, 247);
+}
+
+.delete-input:hover {
+  background-color: white;
+  color: rgb(160, 47, 47);
+}
+
+.delete-input {
+  border-radius: 0 10px 10px 0;
+}
+
+.checkbox-input:checked + label {
+  text-decoration: line-through;
+  opacity: 0.5;
+  border: none;
+}
