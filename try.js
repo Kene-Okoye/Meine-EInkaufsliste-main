@@ -1,115 +1,90 @@
 // <--- SELECTORS --->
-const DocContainer = document.querySelector(".DOC-container");
+const createNewListButton = document.querySelector(".create-list-button");
+const newListTeaser = document.querySelector(".create-new-list-teaser");
+const myLists = [];
+createNewListButton.addEventListener("click", createNewList);
+function createNewList() {
+    document.body.removeChild(createNewListButton);
+    document.body.removeChild(newListTeaser);
+    const newListContainer = document.createElement("div");
+    const listInfoMessage = document.createElement("p");
+    listInfoMessage.innerText = "Enter list name";
+    const newListInput = document.createElement("input");
+    const newListButton = document.createElement("button");
+    newListButton.innerText = "Create list";
+    newListContainer.appendChild(listInfoMessage);
+    newListContainer.appendChild(newListInput);
+    newListContainer.appendChild(newListButton);
+    document.body.appendChild(newListContainer);
+    newListButton.addEventListener("click", (displayList) => {
+        const singleList = {
+            name: newListInput.value,
+            items: []
+        };
+        if (newListInput.value !== "") {
+            myLists.push(singleList);
+            //console.log(myLists);
+            const listContainerDiv = document.createElement("div");
+            const newListName = document.createElement("h1");
+            newListName.innerText = singleList.name;
+            listContainerDiv.appendChild(newListName);
+            document.body.appendChild(listContainerDiv);
+            document.body.removeChild(newListContainer);
+            document.body.appendChild(newListTeaser);
+            document.body.appendChild(createNewListButton);
+            newListName.contentEditable = true;
+            window.alert(`${newListInput.value} has been created.`);
+        }
+        else {
+            window.alert("Please insert an input.");
+        }
+    });
+}
+/* const docContainer = document.querySelector(".DOC-container");
 
-// <--- GLOBAL EVENT LISTENERS --->
+
+// <--- GLOBAL VARIABLES --->
 
 
 // <--- GLOBAL FUNCTIONS CALLS --->
 createNewList();
 
-// <--- GLOBAL VARIABLES --->
-
 // < --- GLOBAL FUNCTION DEFINITIONS --->
 function createNewList() {
     // 1.) Create elements needed for NEW LIST
-    const NewListInput = document.createElement("input");
-    NewListInput.classList.add("new-list-input");
-    const NewListButton = document.createElement("button");
-    NewListButton.classList.add("new-list-button");
-    NewListButton.innerText = "Create list";
-
+    const newListInput = document.createElement("input");
+    const newListButton = document.createElement("button");
+    newListButton.innerText = "Create list";
     // 2.) Attach them to the DOC-container
-    DocContainer.appendChild(NewListInput);
-    DocContainer.appendChild(NewListButton);
+    docContainer.appendChild(newListInput);
+    docContainer.appendChild(newListButton);
+
     // 3.) Display list NAME on DOC-container on click
     // Add an event lister
-    NewListButton.addEventListener("click", displayList);
-    function displayList() {
-        // 3a.) Display the created NEW LIST
+    newListButton.addEventListener("click", (displayList) => {
+        // 2b.) Ensure a user inserts an input before creating the NEW LIST then
+        // remove all other elements and show only NEW LIST attached
+        // to LIST-DIV-CONTAINER
+        if (newListInput.value !== "") {
+            docContainer.removeChild(newListInput);
+            docContainer.removeChild(newListButton);
+            window.alert(`${newListInput.value} has been created.`);
+            createNewList();
+        }
+        else {
+            window.alert("Please insert an input.");
+        }
+        // 2a.) Display the created NEW LIST
         const listContainerDiv = document.createElement("div");
-        listContainerDiv.classList.add("list-container-div");
-        const NewList = document.createElement("div");
-        NewList.classList.add("new-list");
-        NewList.innerText = NewListInput.value;
-        listContainerDiv.appendChild(NewList);
-        DocContainer.appendChild(listContainerDiv);
-        // 3b.) Remove all other elements and show only NEW LIST attached to LIST-DIV-CONTAINER
-        DocContainer.removeChild(NewListInput);
-        DocContainer.removeChild(NewListButton);
-        // 4.) Edit list after its created by clicking on LIST name
+        const newList = document.createElement("div");
+        newList.innerText = newListInput.value;
+        listContainerDiv.appendChild(newList);
+        docContainer.appendChild(listContainerDiv);
+
+        // 3.) Edit list after its created by clicking on LIST name
         // Add an event lister
-        NewList.addEventListener("click", editList);
-        function editList() {
-            this.contentEditable = true;
-        }
-    }
-    createListItems();
-}
-
-function createListItems() {
-    // Create all elements for ITEMS slection
-    const inputArea = document.createElement("div");
-    inputArea.classList.add("input-area");
-    const listInput = document.createElement("input");
-    listInput.classList.add("list-input");
-    const inputButton = document.createElement("button");
-    inputButton.classList.add("input-button");
-    inputButton.innerText = "Add item"
-    const shoplistDiv = document.createElement("div");
-    shoplistDiv.classList.add("shoplist-div");
-    const shoplistContainer = document.createElement("div");
-    shoplistContainer.classList.add("shoplist-div");
-
-    // Join all / Attach all children to parents accordingly
-    inputArea.appendChild(listInput);
-    inputArea.appendChild(inputButton);
-    DocContainer.appendChild(inputArea);
-    DocContainer.appendChild(shoplistContainer);
-    DocContainer.appendChild(shoplistDiv);
-
-    // add an event listener
-    inputButton.addEventListener("click", listElements);
-    // function for creating list items
-    function listElements() {
-
-        // 1.) Create the DIV elements for the list
-        const listDiv = document.createElement("div");
-        listDiv.classList.add("list-div");
-
-        // 2.) Create the CHECKBOX input elements
-        const checkboxInput = document.createElement("input");
-        checkboxInput.classList.add("checkbox-input");
-        checkboxInput.setAttribute("type", "checkbox");
-        //checkboxInput.setAttribute("id", "checkbox-id");
-
-        // 3.) Create the LABEL for the input Elements
-        const checkboxLabel = document.createElement("label");
-        checkboxLabel.classList.add("checkbox-label");
-        //checkboxLabel.setAttribute("for", "checkbox-id");
-        checkboxLabel.innerText = listInput.value;
-
-        // 4.) Create the DELETE-INPUT 
-        const deleteInput = document.createElement("button");
-        deleteInput.classList.add("delete-input");
-        deleteInput.innerHTML = "delete" //'<i class="fas fa-trash-alt"></i>';
-
-        // 5.) Attach all children to parents accordingly
-        listDiv.appendChild(checkboxInput);
-        listDiv.appendChild(checkboxLabel);
-        listDiv.appendChild(deleteInput);
-        shoplistDiv.appendChild(listDiv);
-
-
-        // 6.) Delete the listInput
-        listInput.value = "";
-
-        deleteInput.addEventListener("click", artikelLoeschen);
-        function artikelLoeschen() {
-            shoplistDiv.removeChild(listDiv);
-        }
-    }
-
-}
-
-
-
+        newList.addEventListener("click", (editList) => {
+            newList.contentEditable = true;
+        });
+    });
+} */
