@@ -1,16 +1,28 @@
-// <--- SELECTORS --->
+// <--- MAIN HTML SELECTORS --->
 const createNewListButton = document.querySelector(".create-list-button");
 const newListTeaser = document.querySelector(".create-new-list-teaser");
+
+// <--- CREATE A NEW LIST --->
+// 1.) Create global array & variable to store list data.
 const myLists = [];
+let allList;
+
+// 2.) Add event listner for creating new list.
 createNewListButton.addEventListener("click", createNewList);
+
+// 3.) FUnction to create new list.
 function createNewList() {
     document.body.removeChild(createNewListButton);
     document.body.removeChild(newListTeaser);
     const newListContainer = document.createElement("div");
+    newListContainer.classList.add("new-list-container");
     const listInfoMessage = document.createElement("p");
+    listInfoMessage.classList.add("list-info-message");
     listInfoMessage.innerText = "Enter list name";
     const newListInput = document.createElement("input");
+    newListInput.classList.add("new-list-input");
     const newListButton = document.createElement("button");
+    newListButton.classList.add("new-list-button");
     newListButton.innerText = "Create list";
     newListContainer.appendChild(listInfoMessage);
     newListContainer.appendChild(newListInput);
@@ -23,16 +35,19 @@ function createNewList() {
         };
         if (newListInput.value !== "") {
             myLists.push(singleList);
-            //console.log(myLists);
+            allList = singleList;
+            //console.log(allList);
             const listContainerDiv = document.createElement("div");
+            listContainerDiv.classList.add("list-div-container");
             const newListName = document.createElement("h1");
-            newListName.innerText = singleList.name;
+            newListName.classList.add("new-list-name");
+            newListName.innerText = allList.name;
             listContainerDiv.appendChild(newListName);
             document.body.appendChild(listContainerDiv);
             document.body.removeChild(newListContainer);
             document.body.appendChild(newListTeaser);
             document.body.appendChild(createNewListButton);
-            newListName.contentEditable = true;
+            //newListName.contentEditable = true;
             window.alert(`${newListInput.value} has been created.`);
         }
         else {
@@ -40,6 +55,11 @@ function createNewList() {
         }
     });
 }
+
+
+
+
+
 /* const docContainer = document.querySelector(".DOC-container");
 
 

@@ -1,0 +1,44 @@
+.new-list-background {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(139, 50, 50, 0.452);
+}
+
+.new-list-container {
+  background-color: rgb(32, 173, 32);
+  width: 20em;
+  height: 8em;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+/* For desktop specification */
+@media screen and (min-width: 645px) {
+  .new-list-container {
+    width: 50em;
+    height: 10em;
+  }
+}
+
+.new-list-button {
+  justify-self: end;
+  align-self: center;
+  height: 2em;
+  margin-right: 1.5em;
+}
+
+.new-list-input {
+  margin: 1.5em;
+  margin-top: 0;
+  padding: 0.8em;
+}
+
+.list-info-message {
+  margin: 1em;
+  margin-bottom: 0;
+}
