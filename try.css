@@ -1,11 +1,28 @@
-.new-list-background {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(139, 50, 50, 0.452);
+body {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  justify-content: center;
+  align-content: center;
 }
 
+.create-list-button {
+  height: 2em;
+  background-color: rgb(58, 224, 58);
+  border-radius: 5px;
+}
+
+.list-div-container {
+  background-color: rgb(253, 247, 247);
+  width: 20em;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.create-new-list-teaser {
+  text-align: center;
+}
 .new-list-container {
-  background-color: rgb(32, 173, 32);
+  background-color: rgb(58, 224, 58);
   width: 20em;
   height: 8em;
   position: fixed;
