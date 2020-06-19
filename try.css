@@ -1,26 +1,94 @@
+html,
 body {
+  line-height: 1.5;
+  margin: 0;
+  background-color: rgb(241, 244, 248);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 10% 80% 10%;
+  grid-template-areas:
+    "header header header"
+    "main-doc main-doc main-doc"
+    "footer footer footer";
+}
+
+header {
+  grid-area: header;
+  background-color: rgb(150, 55, 18);
+  color: whitesmoke;
+}
+
+main {
+  grid-area: main-doc;
+  display: grid;
+  grid-template-columns: 25% 1fr;
+  background-color: whitesmoke;
+}
+
+footer {
+  grid-area: footer;
+  background-color: rgb(150, 55, 18);
+  color: whitesmoke;
+  text-align: center;
+}
+
+.main-nav {
+  border-right: solid;
+  border-color: rgba(0, 22, 22, 0.4);
+  position: fixed;
+  height: 100%;
+}
+
+.main-nav-ul {
+  border-right: none;
+  list-style: none;
+  padding: 0%;
+}
+
+.main-nav-ul > li {
+  border-top: 1px solid;
+  list-style-type: none;
+  padding: 2.5%;
+  left: 0px;
+  cursor: pointer;
+}
+
+.main-nav-ul > li:hover {
+  background-color: lightgrey;
+}
+
+.main-div {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-content: center;
 }
 
 .create-list-button {
+  align-self: center;
+  width: auto;
   height: 2em;
   background-color: rgb(58, 224, 58);
   border-radius: 5px;
+  cursor: pointer;
 }
 
-.list-div-container {
+.list-container-div {
   background-color: rgb(253, 247, 247);
   width: 20em;
   border-radius: 5px;
   text-align: center;
+  cursor: pointer;
 }
 
 .create-new-list-teaser {
   text-align: center;
 }
+
 .new-list-container {
   background-color: rgb(58, 224, 58);
   width: 20em;
@@ -31,7 +99,11 @@ body {
   /* bring your own prefixes */
   transform: translate(-50%, -50%);
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 50% 50%;
+  grid-template-areas:
+    "message message message message"
+    "input input input input"
+    "back back create create";
 }
 
 /* For desktop specification */
@@ -42,20 +114,31 @@ body {
   }
 }
 
-.new-list-button {
-  justify-self: end;
-  align-self: center;
-  height: 2em;
-  margin-right: 1.5em;
+.list-info-message {
+  grid-area: message;
+  margin: 1em;
+  margin-bottom: 0;
 }
 
 .new-list-input {
+  grid-area: input;
   margin: 1.5em;
   margin-top: 0;
   padding: 0.8em;
 }
 
-.list-info-message {
-  margin: 1em;
-  margin-bottom: 0;
+.list-back-button {
+  grid-area: back;
+  justify-self: start;
+  align-self: center;
+  height: 2em;
+  margin-left: 1.5em;
+}
+
+.new-list-button {
+  grid-area: create;
+  justify-self: end;
+  align-self: center;
+  height: 2em;
+  margin-right: 1.5em;
 }
