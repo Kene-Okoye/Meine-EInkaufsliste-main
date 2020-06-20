@@ -15,7 +15,7 @@ const deletedStuff = {
 // 2.) Add event listner for showing Trash (deleted stuff).
 trashDiv.addEventListener("click", showT => {
     deletedStuff.deletedLists.forEach(e => {
-        console.log(e.deletedLists);                // ****** SOLVE THIS ****** //
+        console.log(e.deletedLists);                // ****** SOLVE THIS ISSUE, HOW? ****** //
         showTrash(e);
     });
 });
@@ -101,8 +101,7 @@ function showListOverview(overview) {
     const listContainerDiv = document.createElement("div");
     listContainerDiv.classList.add("list-container-div");
     listContainerDiv.addEventListener("click", listDivHeader => {
-        //addItemInterface(overview);
-        reEnterList(overview);
+        addItemInterface(overview);
     });
 
     const newListName = document.createElement("h1");
@@ -177,6 +176,11 @@ function addItemInterface(interface) {
     itemContainerDiv.appendChild(addItemInput);
     itemContainerDiv.appendChild(addItemButton);
     rootNode.appendChild(itemContainerDiv);
+
+    interface.items.forEach(reShowItem => { //// -----> SOLVE ISSUE, HOW? <-------
+        //console.log(reShowItem);
+        //addItemInterface(reShowItem);
+    });
 }
 
 // 2.) Add functions for creating or adding items.
@@ -195,7 +199,7 @@ function createItem(newItem) {
     itemCheckBox.setAttribute("type", "checkbox");
 
     const checkboxLabel = document.createElement("label");
-    checkboxLabel.innerText = newItem.value;
+    checkboxLabel.innerText = newItem.value; // ====== Probable Line to look at to figure out issue =====
 
     const deleteItemButton = document.createElement("button");
     deleteItemButton.innerText = "Delete Item";
@@ -203,7 +207,7 @@ function createItem(newItem) {
         deletedStuff.deletedItems.push(checkboxLabel.innerText);
         const indexI = myLists.indexOf(newItem);
         // myLists.newItem.splice(index, 1);
-        shopItemDiv.removeChild(itemDiv);  //       ------> SOLVE THIS ISSUE <------
+        shopItemDiv.removeChild(itemDiv);  //       ------> SOLVE THIS ISSUE, HOW? <------
         // NOTE: This button is also meant to receive an Array.push method & ****shift()****
         // to push/ remove all deleted items into/from a deleted lists and items overview above
     });
@@ -215,12 +219,4 @@ function createItem(newItem) {
     rootNode.appendChild(shopItemContainer);
 
     newItem.value = "";
-}
-
-function reEnterList(showAgain) {
-    addItemInterface(showAgain);
-    console.log(showAgain);
-    showAgain.items.forEach(reShowItem => { //// -----> SOLVE ISSUE <-------
-        createItem(reShowItem);
-    })
 }
