@@ -3,41 +3,33 @@ const trashDiv = document.querySelector(".trash");
 const createNewListButton = document.querySelector(".create-list-button");
 const newListTeaser = document.querySelector(".create-new-list-teaser");
 
-// <--- CREATE A NEW LIST --->
-// 1.) Create global array & variable to store list data.
+
+// <--- SETUP DATA STORAGE AREA --->
+// 1.) Create global array & variables to store list data.
 const rootNode = document.body
-const myLists = [];
-const deletedStuff = {
-    deletedLists: [],
-    deletedItems: []
+let myLists = [];
+const deletedStuff = [];
+
+// 2.) Implement condition to save myLists to Local Storage
+let listIntoLocal;
+if (localStorage.getItem("listIntoLocal")) {
+    listIntoLocal = JSON.parse(localStorage.getItem("listIntoLocal"));
+}
+else {
+    listIntoLocal = [];
 }
 
-// 2.) Add event listner for showing Trash (deleted stuff).
-trashDiv.addEventListener("click", showT => {
-    deletedStuff.deletedLists.forEach(e => {
-        console.log(e.deletedLists);                // ****** SOLVE THIS ISSUE, HOW? ****** //
-        showTrash(e);
-    });
-});
+localStorage.setItem("listIntoLocal", JSON.stringify(myLists));
+const listFromLocal = JSON.parse(localStorage.getItem('listIntoLocal'))
 
-
-function showTrash(goneList) {
-    clearMainBody();
-    //console.log(deletedStuff);
-    const trashListDiv = document.createElement("div");
-    const trashList = goneList.deletedLists;
-    //console.log(goneList.deletedLists);
-    trashListDiv.innerText = trashList;
-    rootNode.appendChild(trashListDiv);
-}
-
-// 3.) Add event listner for creating new list.
+// <--- CREATE A NEW LIST --->
+// 1.) Add event listner for creating new list.
 createNewListButton.addEventListener("click", createNewList);
 
-// 4.) Functions to create new list.
+// 2.) Implement functions to create new list.
 function createNewList() {
     clearMainBody();
-    showCreateNewList();
+    createNewListInterface();
 }
 
 function clearMainBody() {
@@ -57,7 +49,7 @@ function listObject(objectParameter) {
     };
 }
 
-function showCreateNewList() {
+function createNewListInterface() {
     const newListContainer = document.createElement("div");
     newListContainer.classList.add("new-list-container");
     const listInfoMessage = document.createElement("p");
@@ -81,8 +73,10 @@ function showCreateNewList() {
         if (newListInput.value !== "") {
             const singleList = listObject(newListInput.value);
             myLists.push(singleList);
+            localStorage.setItem("listIntoLocal", JSON.stringify(myLists));
             window.alert(`${newListInput.value} has been created.`);
             rootNode.removeChild(newListContainer);
+            console.log(listFromLocal)
             reAttachMainBody()
         }
         else {
@@ -111,12 +105,9 @@ function showListOverview(overview) {
     const deleteListButton = document.createElement("button");
     deleteListButton.innerText = "Delete";
     deleteListButton.addEventListener("click", deleteList => {
-        deletedStuff.deletedLists.push(overview.name);
-        const index = myLists.indexOf(overview);
-        myLists.splice(index, 1);
-        //findElement(myLists, overview);
-        //console.log(myLists);
-        //console.log(overview);
+        deletedStuff.push(overview);
+        const ListIndex = listFromLocal.indexOf(overview); // myList replaced
+        listFromLocal.splice(ListIndex, 1);                      // myList replaced
         rootNode.removeChild(listContainerDiv);
         rootNode.removeChild(deleteListButton);
     });
@@ -127,7 +118,7 @@ function showListOverview(overview) {
 }
 
 function reAttachMainBody() {
-    myLists.forEach(listName => {
+    listFromLocal.forEach(listName => {
         showListOverview(listName);
     });
     rootNode.appendChild(trashDiv);
@@ -164,7 +155,8 @@ function addItemInterface(interface) {
     addItemButton.addEventListener("click", item => {
         if (addItemInput.value != "") {
             interface.items.push(addItemInput.value);
-            createItem(addItemInput);
+            createItem(addItemInput.value);
+            addItemInput.value = "";
         }
         else {
             window.alert("Please add an item.");
@@ -177,46 +169,87 @@ function addItemInterface(interface) {
     itemContainerDiv.appendChild(addItemButton);
     rootNode.appendChild(itemContainerDiv);
 
-    interface.items.forEach(reShowItem => { //// -----> SOLVE ISSUE, HOW? <-------
-        //console.log(reShowItem);
-        //addItemInterface(reShowItem);
+    // 2.) Add function for creating or adding items.
+    function createItem(newItem) {
+
+        const shopItemContainer = document.createElement("div");
+        shopItemContainer.classList.add("shop-item-container");
+
+        const shopItemDiv = document.createElement("div");
+        shopItemDiv.classList.add("shop-item-div");
+
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("item-div");
+
+        const itemCheckBox = document.createElement("input");
+        itemCheckBox.setAttribute("type", "checkbox");
+
+        const addInputValue = document.querySelector(".add-item-input");
+        const checkboxLabel = document.createElement("label");
+        checkboxLabel.innerText = newItem;
+
+        const deleteItemButton = document.createElement("button");
+        deleteItemButton.innerText = "Delete Item";
+        deleteItemButton.addEventListener("click", deleteItem => {
+
+            const ItemIndex = itemDiv.children[1].innerText;
+            interface.items.splice(interface.items.indexOf(ItemIndex), 1);
+            shopItemDiv.removeChild(itemDiv);
+        });
+        itemDiv.appendChild(itemCheckBox);
+        itemDiv.appendChild(checkboxLabel);
+        itemDiv.appendChild(deleteItemButton);
+        shopItemDiv.appendChild(itemDiv);
+        shopItemContainer.appendChild(shopItemDiv);
+        rootNode.appendChild(shopItemContainer);
+    }
+
+    // 3. Maintain redisplay of each item even after going back to main page
+    interface.items.forEach(reShowItem => {
+        createItem(reShowItem);
     });
 }
 
-// 2.) Add functions for creating or adding items.
-function createItem(newItem) {
-
-    const shopItemContainer = document.createElement("div");
-    shopItemContainer.classList.add("shop-item-container");
-
-    const shopItemDiv = document.createElement("div");
-    shopItemDiv.classList.add("shop-item-div");
-
-    const itemDiv = document.createElement("div");
-    itemDiv.classList.add("item-div");
-
-    const itemCheckBox = document.createElement("input");
-    itemCheckBox.setAttribute("type", "checkbox");
-
-    const checkboxLabel = document.createElement("label");
-    checkboxLabel.innerText = newItem.value; // ====== Probable Line to look at to figure out issue =====
-
-    const deleteItemButton = document.createElement("button");
-    deleteItemButton.innerText = "Delete Item";
-    deleteItemButton.addEventListener("click", deleteItem => {
-        deletedStuff.deletedItems.push(checkboxLabel.innerText);
-        const indexI = myLists.indexOf(newItem);
-        // myLists.newItem.splice(index, 1);
-        shopItemDiv.removeChild(itemDiv);  //       ------> SOLVE THIS ISSUE, HOW? <------
-        // NOTE: This button is also meant to receive an Array.push method & ****shift()****
-        // to push/ remove all deleted items into/from a deleted lists and items overview above
+// <--- DELETE A CREATED LIST --->
+// 1.) Add event listner for showing Trash (deleted stuff).
+trashDiv.addEventListener("click", showTrash => {
+    clearMainBody();
+    const trashBackButton = document.createElement("button");
+    trashBackButton.innerText = "Back";
+    trashBackButton.addEventListener("click", (back) => {
+        goBacktoMain();
     });
-    itemDiv.appendChild(itemCheckBox);
-    itemDiv.appendChild(checkboxLabel);
-    itemDiv.appendChild(deleteItemButton);
-    shopItemDiv.appendChild(itemDiv);
-    shopItemContainer.appendChild(shopItemDiv);
-    rootNode.appendChild(shopItemContainer);
+    deletedStuff.forEach(trash => {
+        trashDisplay(trash);
+    });
+    rootNode.appendChild(trashBackButton);
+});
 
-    newItem.value = "";
+// 2.) Implement function to delete a list.
+function trashDisplay(goneList) {
+    const trashListDiv = document.createElement("div");
+    trashListDiv.innerText = goneList.name;
+    const restoreListButton = document.createElement("button");
+    restoreListButton.innerText = "Restore list"
+    restoreListButton.addEventListener("click", trashAgain => {
+        myLists.push(goneList);
+        const deletedListIndex = deletedStuff.indexOf(goneList);
+        deletedStuff.splice(deletedListIndex, 1);
+        rootNode.removeChild(trashListDiv);
+        rootNode.removeChild(restoreListButton);
+    })
+    rootNode.appendChild(restoreListButton);
+    rootNode.appendChild(trashListDiv);
 }
+
+// 4. Create a function to save my Lists to Local Storage
+/*function SaveToLocalStorage(lists) {
+    if (localStorage.getItem("myLocalLists" === null)) {
+        myLists = [];
+    }
+    else {
+        myLists = JSON.parse(localStorage.getItem("myLists"));
+    }
+    myLists.push(lists);
+    localStorage.setItem("myLocalLists", JSON.stringify(myLists));
+}*/
