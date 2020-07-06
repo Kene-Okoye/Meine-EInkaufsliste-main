@@ -3,14 +3,17 @@ const trashDiv = document.querySelector(".trash");
 const createNewListButton = document.querySelector(".create-list-button");
 const newListTeaser = document.querySelector(".create-new-list-teaser");
 
+// <--- EVENT LISTENER FOR REDISPLAYING LISTS ---> 
+document.addEventListener('DOMContentLoaded', reAttachMainBody);
+
 
 // <--- SETUP DATA STORAGE AREA --->
 // 1.) Create global array & variables to store list data.
 const rootNode = document.body
-let myLists = [];
-const deletedStuff = [];
+//let myLists = [];
+//let deletedStuff = [];
 
-// 2.) Implement condition to save myLists to Local Storage
+// 2.) Implement condition to save myLists to Local Storage ('listInLocal')
 let listIntoLocal;
 if (localStorage.getItem("listIntoLocal")) {
     listIntoLocal = JSON.parse(localStorage.getItem("listIntoLocal"));
@@ -18,9 +21,20 @@ if (localStorage.getItem("listIntoLocal")) {
 else {
     listIntoLocal = [];
 }
-
-localStorage.setItem("listIntoLocal", JSON.stringify(myLists));
+localStorage.setItem("listIntoLocal", JSON.stringify(listIntoLocal));
 const listFromLocal = JSON.parse(localStorage.getItem('listIntoLocal'))
+
+// 2.) Implement condition to push deleted Lists to Local Storage ('deletedStuff')
+let deletedStuff;
+if (localStorage.getItem("deletedStuff")) {
+    deletedStuff = JSON.parse(localStorage.getItem("deletedStuff"));
+}
+else {
+    deletedStuff = [];
+}
+localStorage.setItem("deletedStuff", JSON.stringify(deletedStuff));
+const trash = JSON.parse(localStorage.getItem('deletedStuff'))
+
 
 // <--- CREATE A NEW LIST --->
 // 1.) Add event listner for creating new list.
@@ -72,11 +86,10 @@ function createNewListInterface() {
     newListButton.addEventListener("click", (displayList) => {
         if (newListInput.value !== "") {
             const singleList = listObject(newListInput.value);
-            myLists.push(singleList);
-            localStorage.setItem("listIntoLocal", JSON.stringify(myLists));
+            listFromLocal.push(singleList);
+            localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
             window.alert(`${newListInput.value} has been created.`);
             rootNode.removeChild(newListContainer);
-            console.log(listFromLocal)
             reAttachMainBody()
         }
         else {
@@ -105,9 +118,11 @@ function showListOverview(overview) {
     const deleteListButton = document.createElement("button");
     deleteListButton.innerText = "Delete";
     deleteListButton.addEventListener("click", deleteList => {
-        deletedStuff.push(overview);
-        const ListIndex = listFromLocal.indexOf(overview); // myList replaced
-        listFromLocal.splice(ListIndex, 1);                      // myList replaced
+        trash.push(overview);
+        localStorage.setItem("deletedStuff", JSON.stringify(trash));
+        const ListIndex = listFromLocal.indexOf(overview);
+        listFromLocal.splice(ListIndex, 1);
+        localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
         rootNode.removeChild(listContainerDiv);
         rootNode.removeChild(deleteListButton);
     });
@@ -155,6 +170,7 @@ function addItemInterface(interface) {
     addItemButton.addEventListener("click", item => {
         if (addItemInput.value != "") {
             interface.items.push(addItemInput.value);
+            localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
             createItem(addItemInput.value);
             addItemInput.value = "";
         }
@@ -194,6 +210,7 @@ function addItemInterface(interface) {
 
             const ItemIndex = itemDiv.children[1].innerText;
             interface.items.splice(interface.items.indexOf(ItemIndex), 1);
+            localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
             shopItemDiv.removeChild(itemDiv);
         });
         itemDiv.appendChild(itemCheckBox);
@@ -219,37 +236,40 @@ trashDiv.addEventListener("click", showTrash => {
     trashBackButton.addEventListener("click", (back) => {
         goBacktoMain();
     });
-    deletedStuff.forEach(trash => {
-        trashDisplay(trash);
+    trash.forEach(trashToList => {
+        trashDisplay(trashToList);
     });
     rootNode.appendChild(trashBackButton);
 });
 
-// 2.) Implement function to delete a list.
+// 2.) Implement function to restore or totally delete a list from the trash.
 function trashDisplay(goneList) {
     const trashListDiv = document.createElement("div");
     trashListDiv.innerText = goneList.name;
     const restoreListButton = document.createElement("button");
-    restoreListButton.innerText = "Restore list"
+    restoreListButton.innerText = "Restore list";
     restoreListButton.addEventListener("click", trashAgain => {
-        myLists.push(goneList);
-        const deletedListIndex = deletedStuff.indexOf(goneList);
-        deletedStuff.splice(deletedListIndex, 1);
+        listFromLocal.push(goneList);
+        localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
+        const deletedListIndex = trash.indexOf(goneList);
+        trash.splice(deletedListIndex, 1);
+        localStorage.setItem("deletedStuff", JSON.stringify(trash));
         rootNode.removeChild(trashListDiv);
         rootNode.removeChild(restoreListButton);
     })
+    const removeFromTrashButton = document.createElement("button");
+    removeFromTrashButton.innerText = "Remove";
+    removeFromTrashButton.addEventListener("click", listRemove => {
+        const trashIndex = trash.indexOf(goneList);
+        trash.splice(trashIndex, 1);
+        localStorage.setItem("deletedStuff", JSON.stringify(trash));
+        rootNode.removeChild(restoreListButton);
+        rootNode.removeChild(removeFromTrashButton);
+        rootNode.removeChild(trashListDiv);
+
+    });
+
     rootNode.appendChild(restoreListButton);
+    rootNode.appendChild(removeFromTrashButton);
     rootNode.appendChild(trashListDiv);
 }
-
-// 4. Create a function to save my Lists to Local Storage
-/*function SaveToLocalStorage(lists) {
-    if (localStorage.getItem("myLocalLists" === null)) {
-        myLists = [];
-    }
-    else {
-        myLists = JSON.parse(localStorage.getItem("myLists"));
-    }
-    myLists.push(lists);
-    localStorage.setItem("myLocalLists", JSON.stringify(myLists));
-}*/
