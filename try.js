@@ -1,17 +1,53 @@
 // <--- MAIN HTML SELECTORS --->
-const trashDiv = document.querySelector(".trash");
+const listNav = document.querySelector(".list-nav");
+const trashNav = document.querySelector(".trash-nav");
+const feedbackNav = document.querySelector(".feedback-nav");
+const helpNav = document.querySelector(".help-nav");
+const settingsNav = document.querySelector(".settings-nav");
+
 const createNewListButton = document.querySelector(".create-list-button");
 const newListTeaser = document.querySelector(".create-new-list-teaser");
+const wrapperDiv = document.querySelector(".wrapper");
+const mainDiv = document.querySelector(".main-div");
+
+// ADDING CURRENT DATE TO APP --->
+var dateString = new Date();
+dateString = new Date(dateString).toUTCString();
+dateString = dateString.split(' ').slice(0, 4).join(' ');
+const dateDisplay = document.querySelector(".main-nav-date");
+dateDisplay.innerHTML = dateString
+
+// <--- EVENT LISTENER FOR NAV --->
+listNav.addEventListener("click", listNavShow => {
+    clearMainDiv();
+    reAttachMainBody()
+});
+
+feedbackNav.addEventListener("click", blankMessage);
+helpNav.addEventListener("click", blankMessage);
+settingsNav.addEventListener("click", blankMessage);
+
+function blankMessage() {
+    clearMainDiv();
+    const blankMsgDiv = document.createElement("div");
+    blankMsgDiv.classList.add("blank-msg-div");
+    const blankMsgImg = document.createElement("div");
+    blankMsgImg.classList.add("blank-msg-img");
+    const blankMsg = document.createElement("p")
+    blankMsg.classList.add("blank-msg");
+    blankMsg.innerHTML = "OOPS," + "<br />" + "... nothing to see here.";
+
+    blankMsgDiv.appendChild(blankMsgImg);
+    blankMsgDiv.appendChild(blankMsg);
+    mainDiv.appendChild(blankMsgDiv);
+}
 
 // <--- EVENT LISTENER FOR REDISPLAYING LISTS ---> 
 document.addEventListener('DOMContentLoaded', reAttachMainBody);
 
-
 // <--- SETUP DATA STORAGE AREA --->
 // 1.) Create global array & variables to store list data.
 const rootNode = document.body
-//let myLists = [];
-//let deletedStuff = [];
 
 // 2.) Implement condition to save myLists to Local Storage ('listInLocal')
 let listIntoLocal;
@@ -24,7 +60,7 @@ else {
 localStorage.setItem("listIntoLocal", JSON.stringify(listIntoLocal));
 const listFromLocal = JSON.parse(localStorage.getItem('listIntoLocal'))
 
-// 2.) Implement condition to push deleted Lists to Local Storage ('deletedStuff')
+// 3.) Implement condition to push deleted Lists to Local Storage ('deletedStuff')
 let deletedStuff;
 if (localStorage.getItem("deletedStuff")) {
     deletedStuff = JSON.parse(localStorage.getItem("deletedStuff"));
@@ -35,14 +71,13 @@ else {
 localStorage.setItem("deletedStuff", JSON.stringify(deletedStuff));
 const trash = JSON.parse(localStorage.getItem('deletedStuff'))
 
-
 // <--- CREATE A NEW LIST --->
 // 1.) Add event listner for creating new list.
 createNewListButton.addEventListener("click", createNewList);
 
 // 2.) Implement functions to create new list.
 function createNewList() {
-    clearMainBody();
+    clearMainDiv();
     createNewListInterface();
 }
 
@@ -64,20 +99,27 @@ function listObject(objectParameter) {
 }
 
 function createNewListInterface() {
+    const newListContainerDiv = document.createElement("div");
+    newListContainerDiv.classList.add("new-list-container-div");
     const newListContainer = document.createElement("div");
     newListContainer.classList.add("new-list-container");
+    const listNameBack = document.createElement("div");
+    listNameBack.classList.add("list-name-back");
     const listInfoMessage = document.createElement("p");
     listInfoMessage.classList.add("list-info-message");
     listInfoMessage.innerText = "Enter list name";
 
+    const listInputCreate = document.createElement("div");
+    listInputCreate.classList.add("list-input-create");
     const newListInput = document.createElement("input");
     newListInput.classList.add("new-list-input");
 
     const listBackButton = document.createElement("button");
     listBackButton.classList.add("list-back-button");
-    listBackButton.innerText = "Back";
+    listBackButton.innerHTML = '<i class="fas fa-arrow-circle-left"></i>';
     listBackButton.addEventListener("click", (back) => {
-        goBacktoMain();
+        clearMainDiv();
+        reAttachMainBody();
     });
 
     const newListButton = document.createElement("button");
@@ -89,56 +131,64 @@ function createNewListInterface() {
             listFromLocal.push(singleList);
             localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
             window.alert(`${newListInput.value} has been created.`);
-            rootNode.removeChild(newListContainer);
-            reAttachMainBody()
+            clearMainDiv();
+            reAttachMainBody();
         }
         else {
             window.alert("Please insert an input.");
         }
     });
 
-    newListContainer.appendChild(listInfoMessage);
-    newListContainer.appendChild(newListInput);
-    newListContainer.appendChild(listBackButton);
-    newListContainer.appendChild(newListButton);
-    rootNode.appendChild(newListContainer);
+    listNameBack.appendChild(listInfoMessage);
+    listNameBack.appendChild(listBackButton);
+    newListContainer.appendChild(listNameBack);
+    listInputCreate.appendChild(newListInput);
+    listInputCreate.appendChild(newListButton);
+    newListContainer.appendChild(listInputCreate);
+    newListContainerDiv.appendChild(newListContainer);
+    mainDiv.appendChild(newListContainerDiv);
 }
 
 function showListOverview(overview) {
     const listContainerDiv = document.createElement("div");
     listContainerDiv.classList.add("list-container-div");
-    listContainerDiv.addEventListener("click", listDivHeader => {
+
+    const newListNameDiv = document.createElement("div");
+    newListNameDiv.classList.add("new-list-name-div");
+
+    const newListName = document.createElement("h2");
+    newListName.classList.add("new-list-name");
+    newListName.innerText = overview.name;
+    newListName.addEventListener("click", listDivHeader => {
         addItemInterface(overview);
     });
 
-    const newListName = document.createElement("h1");
-    newListName.classList.add("new-list-name");
-    newListName.innerText = overview.name;
-
     const deleteListButton = document.createElement("button");
-    deleteListButton.innerText = "Delete";
+    deleteListButton.classList.add("delete-list-button");
+    deleteListButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+
     deleteListButton.addEventListener("click", deleteList => {
         trash.push(overview);
         localStorage.setItem("deletedStuff", JSON.stringify(trash));
         const ListIndex = listFromLocal.indexOf(overview);
         listFromLocal.splice(ListIndex, 1);
         localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
-        rootNode.removeChild(listContainerDiv);
-        rootNode.removeChild(deleteListButton);
+        mainDiv.removeChild(listContainerDiv);
+        newListNameDiv.removeChild(deleteListButton);
     });
 
-    listContainerDiv.appendChild(newListName);
-    rootNode.appendChild(listContainerDiv);
-    rootNode.appendChild(deleteListButton);
+    newListNameDiv.appendChild(newListName);
+    newListNameDiv.appendChild(deleteListButton);
+    listContainerDiv.appendChild(newListNameDiv);
+    mainDiv.appendChild(listContainerDiv);
 }
 
 function reAttachMainBody() {
+    mainDiv.appendChild(newListTeaser);
+    mainDiv.appendChild(createNewListButton);
     listFromLocal.forEach(listName => {
         showListOverview(listName);
     });
-    rootNode.appendChild(trashDiv);
-    rootNode.appendChild(newListTeaser);
-    rootNode.appendChild(createNewListButton);
 }
 
 function goBacktoMain() {
@@ -149,24 +199,25 @@ function goBacktoMain() {
 // <--- ADD ITEMS TO LIST --->
 // 1.) Create the Add item interface function 
 function addItemInterface(interface) {
-    clearMainBody();
+    clearMainDiv();
 
     const listHeader = document.createElement("h1");
+    listHeader.classList.add("list-header")
     listHeader.innerText = interface.name;
 
     const itemContainerDiv = document.createElement("div");
+    itemContainerDiv.classList.add("item-container-div")
 
-    const itemBackButton = document.createElement("button");
-    itemBackButton.innerText = "Back";
-    itemBackButton.addEventListener("click", (goBack) => {
-        goBacktoMain();
-    });
+    const inputDiv = document.createElement("div");
+    inputDiv.classList.add("input-div");
 
     const addItemInput = document.createElement("input");
     addItemInput.classList.add("add-item-input");
+    addItemInput.placeholder = "Add item";
 
     const addItemButton = document.createElement("button");
-    addItemButton.innerText = "Add item";
+    addItemButton.classList.add("add-item-button");
+    addItemButton.innerHTML = '<i class="fas fa-plus-circle"></i>';
     addItemButton.addEventListener("click", item => {
         if (addItemInput.value != "") {
             interface.items.push(addItemInput.value);
@@ -179,11 +230,11 @@ function addItemInterface(interface) {
         }
     });
 
-    rootNode.appendChild(listHeader);
-    rootNode.appendChild(itemBackButton);
-    itemContainerDiv.appendChild(addItemInput);
-    itemContainerDiv.appendChild(addItemButton);
-    rootNode.appendChild(itemContainerDiv);
+    inputDiv.appendChild(addItemInput);
+    inputDiv.appendChild(addItemButton);
+    itemContainerDiv.appendChild(inputDiv);
+    mainDiv.appendChild(itemContainerDiv);
+    mainDiv.appendChild(listHeader);
 
     // 2.) Add function for creating or adding items.
     function createItem(newItem) {
@@ -199,26 +250,35 @@ function addItemInterface(interface) {
 
         const itemCheckBox = document.createElement("input");
         itemCheckBox.setAttribute("type", "checkbox");
+        itemCheckBox.classList.add("item-check-box");
+        itemCheckBox.addEventListener("click", lineCheck => {
+            if (checkboxLabel.style.textDecoration === "line-through") {
+                checkboxLabel.style.textDecoration = "none";
+            } else {
+                checkboxLabel.style.textDecoration = "line-through";
+            }
+        });
 
         const addInputValue = document.querySelector(".add-item-input");
         const checkboxLabel = document.createElement("label");
+        checkboxLabel.classList.add("checkbox-label");
         checkboxLabel.innerText = newItem;
 
         const deleteItemButton = document.createElement("button");
-        deleteItemButton.innerText = "Delete Item";
+        deleteItemButton.classList.add("delete-item-button");
+        deleteItemButton.innerHTML = '<i class="fas fa-trash-alt"></i>'
         deleteItemButton.addEventListener("click", deleteItem => {
-
             const ItemIndex = itemDiv.children[1].innerText;
             interface.items.splice(interface.items.indexOf(ItemIndex), 1);
             localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
-            shopItemDiv.removeChild(itemDiv);
+            mainDiv.removeChild(shopItemContainer);
         });
         itemDiv.appendChild(itemCheckBox);
         itemDiv.appendChild(checkboxLabel);
         itemDiv.appendChild(deleteItemButton);
         shopItemDiv.appendChild(itemDiv);
         shopItemContainer.appendChild(shopItemDiv);
-        rootNode.appendChild(shopItemContainer);
+        mainDiv.appendChild(shopItemContainer);
     }
 
     // 3. Maintain redisplay of each item even after going back to main page
@@ -229,47 +289,82 @@ function addItemInterface(interface) {
 
 // <--- DELETE A CREATED LIST --->
 // 1.) Add event listner for showing Trash (deleted stuff).
-trashDiv.addEventListener("click", showTrash => {
-    clearMainBody();
-    const trashBackButton = document.createElement("button");
-    trashBackButton.innerText = "Back";
-    trashBackButton.addEventListener("click", (back) => {
-        goBacktoMain();
-    });
+// Function to remove all children in main Div
+function clearMainDiv(mainDivChildren) {
+    while (mainDiv.lastChild) {
+        mainDiv.removeChild(mainDiv.lastChild);
+    }
+}
+trashNav.addEventListener("click", showTrash => {
+    clearMainDiv();
     trash.forEach(trashToList => {
         trashDisplay(trashToList);
     });
-    rootNode.appendChild(trashBackButton);
 });
 
 // 2.) Implement function to restore or totally delete a list from the trash.
 function trashDisplay(goneList) {
+    const trashContainerDiv = document.createElement("div");
+    trashContainerDiv.classList.add("trash-container-div");
     const trashListDiv = document.createElement("div");
-    trashListDiv.innerText = goneList.name;
+    trashListDiv.classList.add("trash-list-div");
+
+    const trashListName = document.createElement("h2");
+    trashListName.classList.add("trash-list-name");
+    trashListName.innerText = goneList.name;
     const restoreListButton = document.createElement("button");
-    restoreListButton.innerText = "Restore list";
+    restoreListButton.classList.add("restore-list-button");
+    restoreListButton.innerHTML = '<i class="fas fa-trash-restore-alt"></i>';
     restoreListButton.addEventListener("click", trashAgain => {
         listFromLocal.push(goneList);
         localStorage.setItem("listIntoLocal", JSON.stringify(listFromLocal));
         const deletedListIndex = trash.indexOf(goneList);
         trash.splice(deletedListIndex, 1);
         localStorage.setItem("deletedStuff", JSON.stringify(trash));
-        rootNode.removeChild(trashListDiv);
-        rootNode.removeChild(restoreListButton);
+        trashContainerDiv.removeChild(trashListDiv);
     })
     const removeFromTrashButton = document.createElement("button");
-    removeFromTrashButton.innerText = "Remove";
+    removeFromTrashButton.classList.add("remove-from-trash-button");
+    removeFromTrashButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
     removeFromTrashButton.addEventListener("click", listRemove => {
         const trashIndex = trash.indexOf(goneList);
         trash.splice(trashIndex, 1);
         localStorage.setItem("deletedStuff", JSON.stringify(trash));
-        rootNode.removeChild(restoreListButton);
-        rootNode.removeChild(removeFromTrashButton);
-        rootNode.removeChild(trashListDiv);
-
+        trashListDiv.removeChild(restoreListButton);
+        trashListDiv.removeChild(removeFromTrashButton);
+        trashContainerDiv.removeChild(trashListDiv);
     });
 
-    rootNode.appendChild(restoreListButton);
-    rootNode.appendChild(removeFromTrashButton);
-    rootNode.appendChild(trashListDiv);
+    trashListDiv.appendChild(trashListName);
+    trashListDiv.appendChild(restoreListButton);
+    trashListDiv.appendChild(removeFromTrashButton);
+    trashContainerDiv.appendChild(trashListDiv);
+    mainDiv.appendChild(trashContainerDiv);
 }
+
+// Add a condition to check & display a message depending on 
+//if any list has been created
+/*function tryMainDiv() {
+    if (document
+        .querySelector(".main-div")
+        .querySelectorAll(".list-container-div").length > 0) {
+        const createNewListIcon = document.createElement("button")
+        createNewListIcon.classList.add("create-new-list-icon");
+        createNewListIcon.innerHTML = '<i class="fas fa-plus-circle"></i>';
+        createNewListIcon.addEventListener("click", createNewList);
+        mainDiv.appendChild(createNewListIcon);
+    }
+    else {
+        const newListTeaser = document.createElement("p");
+        newListTeaser.classList.add("create-new-list-teaser");
+        newListTeaser.innerHTML = "Create your new list" + "<br />" + "and let's get shopping.";
+        const createNewListButton = document.createElement("button");
+        createNewListButton.innerText = "CREATE NEW LIST";
+        mainDiv.appendChild(newListTeaser);
+        mainDiv.appendChild(createNewListButton);
+        createNewListButton.addEventListener("click", createNewList);
+    }
+}*/
+
+
+

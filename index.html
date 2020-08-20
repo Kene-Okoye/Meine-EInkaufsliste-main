@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Einkaufsliste</title>
+    <title>List trial</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
@@ -14,20 +14,38 @@
       href="https://fonts.googleapis.com/css2?family=Poppins&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="stylesheet.css" />
+  <link rel="stylesheet" href="try.css" />
   </head>
   <body>
-    <header>Meine Einkaufsliste</header>
-    <div class="input-area">
-      <input class="list-input" placeholder="Artikel hinzfügen" />
-      <button class="input-button" type="button">
-        <i class="fas fa-plus-circle"></i>
-      </button>
+    <div class="wrapper">
+      <header>
+        <p class="logo">Meine Einkaufsliste</p>
+      </header>
+      <main>
+        <div class="main-nav">
+          <p class="main-nav-date"></p>
+          <ul class="main-nav-ul">
+            <li class="main-nav-li list-nav"><i class="fas fa-th-list nav-fas"></i></i><span class="nav-span"> List</span></li>
+            <li class="main-nav-li trash-nav"><i class="fas fa-trash-alt nav-fas"></i><span class="nav-span">Trash</span></li>
+            <li class="main-nav-li feedback-nav"><i class="fas fa-comment-dots nav-fas"></i><span class="nav-span">Feedback</span></li>
+            <li class="main-nav-li help-nav"><i class="fas fa-question-circle nav-fas"></i><span class="nav-span">Help</span></li>
+            <li class="main-nav-li settings-nav"><i class="fas fa-cog nav-fas"></i><span class="nav-span">Settings</span></li>
+          </ul>
+        </div>
+        <div class="main-div">
+          <p class="create-new-list-teaser">
+            Create your new list <br />
+            and let's get shopping.
+          </p>
+          <button class="create-list-button">CREATE NEW LIST</button>
+        </div>
+      </main>
+      <!-- <footer>
+        <hr />
+        <p>&copy;Kene Okoye, 2020.</p>
+      </footer> -->
     </div>
-    <div class="shoplist-container">
-      <div class="shoplist-div"></div>
-    </div>
-    
-    <script src="shoppingList.js"></script>
+    <!--<div class="DOC-container"></div>-->
+    <script src="try.js"></script>
   </body>
 </html>

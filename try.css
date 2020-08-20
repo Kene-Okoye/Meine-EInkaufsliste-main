@@ -1,144 +1,340 @@
+
 html,
 body {
-  line-height: 1.5;
-  margin: 0;
-  background-color: rgb(241, 244, 248);
-}
-
-body {
   font-family: "Poppins", sans-serif;
+  display: block;
+  line-height: 1.5;
+  background-color: rgb(241, 244, 248);
+  height: 100%;
+  margin: 0%;
+}
+
+/* <--- WRAPPER DIV STYLES ---> */
+.wrapper {
+  height: inherit;
   display: grid;
-  grid-template-columns: 10% 80% 10%;
+  grid-gap: 1rem;
+  grid-template-rows: 20% 80%;
   grid-template-areas:
-    "header header header"
-    "main-doc main-doc main-doc"
-    "footer footer footer";
+  "header header header"
+  "main main main";
 }
 
+/*** Wrapper div children styles ***/
+/* 1.) Header Styles */
 header {
+  background-color: rgb(150, 55, 18);
+  color: whitesmoke;
   grid-area: header;
-  background-color: rgb(150, 55, 18);
-  color: whitesmoke;
-}
-
-main {
-  grid-area: main-doc;
-  display: grid;
-  grid-template-columns: 25% 1fr;
-  background-color: whitesmoke;
-}
-
-footer {
-  grid-area: footer;
-  background-color: rgb(150, 55, 18);
-  color: whitesmoke;
+  padding-left: 10px;
+  height: 94.5%;
+  padding-bottom: 1.5rem;
+  font-size: 1.9rem;
   text-align: center;
+}
+
+@media (min-width: 600px) {
+  header { text-align: left; 
+    font-size: 2.3rem;}
+}
+
+/* 2.) Main styles */
+main {
+  grid-area: main;
+  display: grid;
+  
+}
+
+@media (min-width: 600px) {
+  main { grid-template-columns: 1fr 3fr; }
+}
+
+.logo,
+.nav-fas,
+.nav-span {
+  padding-left: 2rem;
 }
 
 .main-nav {
-  border-right: solid;
-  border-color: rgba(0, 22, 22, 0.4);
-  position: fixed;
-  height: 100%;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-rows: 1fr 4fr;
+  box-shadow: 2px 0px 2px grey;
 }
 
-.main-nav-ul {
-  border-right: none;
-  list-style: none;
-  padding: 0%;
-}
-
-.main-nav-ul > li {
-  border-top: 1px solid;
-  list-style-type: none;
-  padding: 2.5%;
-  left: 0px;
-  cursor: pointer;
-}
-
-.main-nav-ul > li:hover {
-  background-color: lightgrey;
-}
-
-.main-div {
-  padding: 0;
+.main-nav-date, 
+.blank-msg,
+.blank-msg-div  {
   margin: 0;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.create-list-button {
-  align-self: center;
-  width: auto;
-  height: 2em;
-  background-color: rgb(58, 224, 58);
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.list-container-div {
-  background-color: rgb(253, 247, 247);
-  width: 20em;
-  border-radius: 5px;
+  align-items: center;
   text-align: center;
+  }
+
+.main-nav-date {
+  background-color:  #cea000;
+}
+
+.main-nav-ul {
+  list-style: none;
+  margin: 0;
+  padding: 0%;
+}
+
+.fa-arrow-circle-left,
+.fa-th-list, 
+.fa-trash-alt, 
+.fa-trash-restore-alt,
+.fa-comment-dots,
+.fa-question-circle,
+.fa-cog {
+  font-size: 130%;
+  color: rgb(150, 55, 18);
+}
+
+.main-nav-li {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  box-shadow: 0px 2px 2px grey;
+  list-style-type: none;  
+  padding: 0.6rem;
   cursor: pointer;
+}
+
+@media (min-width: 600px) {
+  .main-nav-li { 
+    padding: 0.9rem 0.5rem;
+    left: 0px;}
+}
+
+.main-nav-li:hover {
+  background-color: lightgrey;
+}
+
+/* 3.) Main nav children styles*/
+/* List container */
+.new-list-container-div,
+.list-container-div, 
+.trash-container-div,
+.input-div {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-div {
+  text-align: center;
 }
 
 .create-new-list-teaser {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
+.create-list-button {
+  margin:auto;
+  display:block;
+  padding: 0.4rem;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 2px 0px 2px grey;
+  background-color: rgb(32, 173, 32);
+  color: white;
+}
+
+.create-list-button:hover {
+  box-shadow: 2px 0px 5px grey;
+}
+
+/* <--- CREATE NEW LIST INTERFACE STYLES ---> */
+.new-list-container-div {
+  margin-top: 1rem;
+}
+
+@media (min-width: 600px) {
+  .new-list-container-div { margin-top: 10rem; }
+}
+
 .new-list-container {
-  background-color: rgb(58, 224, 58);
-  width: 20em;
-  height: 8em;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  transform: translate(-50%, -50%);
   display: grid;
-  grid-template-columns: 1fr 1fr 50% 50%;
-  grid-template-areas:
-    "message message message message"
-    "input input input input"
-    "back back create create";
+  grid-template-rows: 1fr 1fr;
+  padding: 1rem;
+  margin: 0.5rem 0 0.5rem 0;
+  background: rgb(253, 247, 247);
+  font-size: inherit;
+  border-radius: 5px;
+  min-width: 60%;
+  box-shadow: 0px 2px 2px grey;
 }
 
-/* For desktop specification */
-@media screen and (min-width: 645px) {
-  .new-list-container {
-    width: 50em;
-    height: 10em;
-  }
+.list-name-back, .list-input-create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.list-info-message {
-  grid-area: message;
-  margin: 1em;
-  margin-bottom: 0;
-}
-
-.new-list-input {
-  grid-area: input;
-  margin: 1.5em;
-  margin-top: 0;
-  padding: 0.8em;
-}
-
-.list-back-button {
-  grid-area: back;
-  justify-self: start;
-  align-self: center;
-  height: 2em;
-  margin-left: 1.5em;
+.new-list-input,
+.new-list-button {
+  padding: 0.5rem;
+  border: none;
+  font-size: inherit;
+  box-shadow: 0px 2px 2px grey;
 }
 
 .new-list-button {
-  grid-area: create;
-  justify-self: end;
-  align-self: center;
-  height: 2em;
-  margin-right: 1.5em;
+  color: white;
+  background: rgb(32, 173, 32);
+  cursor: pointer;
+  transition: all 0.3sec ease;
+  }
+
+.list-info-message {
+flex: 1;
+padding-left: 0.8rem;
+}
+
+.new-list-name-div,
+.trash-list-div,
+.item-div {
+  margin: 0.5rem 0 0.5rem 0;
+  background: rgb(253, 247, 247);
+  font-size: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  min-width: 60%;
+  box-shadow: 0px 2px 2px grey;
+}
+
+.new-list-name-div,
+.trash-list-div {
+  box-shadow: 0px 2px 2px grey;
+}
+
+.new-list-name-div:hover,
+.trash-list-div:hover {
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+}
+
+.new-list-name,
+.trash-list-name, 
+.checkbox-label {
+  flex: 1;
+  padding-left: 0.8rem;
+}
+
+.new-list-name {
+  cursor: pointer;
+}
+
+.list-back-button,
+.delete-list-button,
+.remove-from-trash-button, 
+.restore-list-button {
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: rgb(253, 247, 247);
+}
+
+/* Trash container Styles*/
+
+.remove-from-trash-button:hover, 
+.restore-list-button:hover,
+.delete-list-button:hover,
+.delete-item-button:hover {
+  display: block;
+  border-radius: 50%;
+  background-color: lightgrey;
+  transition: all 0.15s ease-in-out;
+}
+
+.delete-list-button,
+.remove-from-trash-button {
+margin-right: 1rem;
+}
+
+/* Feedback, Help & Settings blank-msg Styles */
+.blank-msg-img {
+  margin-top: 1.5rem;
+  width: 30rem;
+  min-height: 50vh;
+  font-size: 1.5rem;
+  background-image: url("https://cdn.clipart.email/cba0e55ae2d04cf8ef2c1e67f3ddb578_sloth-sleeping-on-tree-svg-cut-file-svg-cut-file-scrapbook-cut-_432-432.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+.blank-msg {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .blank-msg,
+  .blank-msg-img { font-size: 2rem; }
+}
+
+/* <--- ADD ITEM INTERFACE STYLES ---> */
+.add-item-input {
+  padding: 0.8rem;
+  border: none;
+  font-size: inherit;
+}
+
+.add-item-input {
+  min-width: 15rem;
+}
+
+.add-item-button {
+  padding: 0.61rem;
+  border: none;
+  color: rgb(32, 173, 32);
+  background: white;
+  cursor: pointer;
+  transition: all 0.3sec ease;
+  }
+
+.fa-plus-circle {
+  font-size: 180%;
+  color: rgb(32, 173, 32);
+}
+
+/* Item container Styles*/
+
+.list-header {
+  margin-left: 12.5rem;
+  max-width: 60%;
+  margin-bottom: 0;
+}
+
+.shop-item-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-check-box {
+  margin-left: 1.95rem;
+}
+
+.delete-item-button {
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: rgb(253, 247, 247);
+}
+
+.delete-item-button {
+margin-right: 1rem;
 }
