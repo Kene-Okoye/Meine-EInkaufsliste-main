@@ -1,4 +1,3 @@
-
 html,
 body {
   font-family: "Poppins", sans-serif;
@@ -16,14 +15,14 @@ body {
   grid-gap: 1rem;
   grid-template-rows: 20% 80%;
   grid-template-areas:
-  "header header header"
-  "main main main";
+    "header header header"
+    "main main main";
 }
 
 /*** Wrapper div children styles ***/
 /* 1.) Header Styles */
 header {
-  background-color: rgb(150, 55, 18);
+  background-color: rgb(34, 32, 32);
   color: whitesmoke;
   grid-area: header;
   padding-left: 10px;
@@ -34,19 +33,22 @@ header {
 }
 
 @media (min-width: 600px) {
-  header { text-align: left; 
-    font-size: 2.3rem;}
+  header {
+    text-align: left;
+    font-size: 2.3rem;
+  }
 }
 
 /* 2.) Main styles */
 main {
   grid-area: main;
   display: grid;
-  
 }
 
 @media (min-width: 600px) {
-  main { grid-template-columns: 1fr 3fr; }
+  main {
+    grid-template-columns: 1fr 3fr;
+  }
 }
 
 .logo,
@@ -62,9 +64,9 @@ main {
   box-shadow: 2px 0px 2px grey;
 }
 
-.main-nav-date, 
+.main-nav-date,
 .blank-msg,
-.blank-msg-div  {
+.blank-msg-div {
   margin: 0;
   padding: 1rem;
   display: flex;
@@ -72,10 +74,10 @@ main {
   justify-content: center;
   align-items: center;
   text-align: center;
-  }
+}
 
 .main-nav-date {
-  background-color:  #cea000;
+  background-color: rgb(90, 86, 86);
 }
 
 .main-nav-ul {
@@ -85,29 +87,30 @@ main {
 }
 
 .fa-arrow-circle-left,
-.fa-th-list, 
-.fa-trash-alt, 
+.fa-th-list,
+.fa-trash-alt,
 .fa-trash-restore-alt,
 .fa-comment-dots,
 .fa-question-circle,
 .fa-cog {
   font-size: 130%;
-  color: rgb(150, 55, 18);
+  color: rgb(34, 32, 32);
 }
 
 .main-nav-li {
   display: grid;
   grid-template-columns: 20% 80%;
   box-shadow: 0px 2px 2px grey;
-  list-style-type: none;  
+  list-style-type: none;
   padding: 0.6rem;
   cursor: pointer;
 }
 
 @media (min-width: 600px) {
-  .main-nav-li { 
+  .main-nav-li {
     padding: 0.9rem 0.5rem;
-    left: 0px;}
+    left: 0px;
+  }
 }
 
 .main-nav-li:hover {
@@ -117,7 +120,7 @@ main {
 /* 3.) Main nav children styles*/
 /* List container */
 .new-list-container-div,
-.list-container-div, 
+.list-container-div,
 .trash-container-div,
 .input-div {
   margin-top: 20px;
@@ -139,8 +142,8 @@ main {
 }
 
 .create-list-button {
-  margin:auto;
-  display:block;
+  margin: auto;
+  display: block;
   padding: 0.4rem;
   border-radius: 5px;
   border: none;
@@ -159,7 +162,9 @@ main {
 }
 
 @media (min-width: 600px) {
-  .new-list-container-div { margin-top: 10rem; }
+  .new-list-container-div {
+    margin-top: 10rem;
+  }
 }
 
 .new-list-container {
@@ -174,7 +179,8 @@ main {
   box-shadow: 0px 2px 2px grey;
 }
 
-.list-name-back, .list-input-create {
+.list-name-back,
+.list-input-create {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,11 +199,11 @@ main {
   background: rgb(32, 173, 32);
   cursor: pointer;
   transition: all 0.3sec ease;
-  }
+}
 
 .list-info-message {
-flex: 1;
-padding-left: 0.8rem;
+  flex: 1;
+  padding-left: 0.8rem;
 }
 
 .new-list-name-div,
@@ -226,7 +232,7 @@ padding-left: 0.8rem;
 }
 
 .new-list-name,
-.trash-list-name, 
+.trash-list-name,
 .checkbox-label {
   flex: 1;
   padding-left: 0.8rem;
@@ -238,7 +244,7 @@ padding-left: 0.8rem;
 
 .list-back-button,
 .delete-list-button,
-.remove-from-trash-button, 
+.remove-from-trash-button,
 .restore-list-button {
   border: none;
   padding: 1rem;
@@ -249,7 +255,7 @@ padding-left: 0.8rem;
 
 /* Trash container Styles*/
 
-.remove-from-trash-button:hover, 
+.remove-from-trash-button:hover,
 .restore-list-button:hover,
 .delete-list-button:hover,
 .delete-item-button:hover {
@@ -261,7 +267,7 @@ padding-left: 0.8rem;
 
 .delete-list-button,
 .remove-from-trash-button {
-margin-right: 1rem;
+  margin-right: 1rem;
 }
 
 /* Feedback, Help & Settings blank-msg Styles */
@@ -272,7 +278,7 @@ margin-right: 1rem;
   font-size: 1.5rem;
   background-image: url("https://cdn.clipart.email/cba0e55ae2d04cf8ef2c1e67f3ddb578_sloth-sleeping-on-tree-svg-cut-file-svg-cut-file-scrapbook-cut-_432-432.png");
   background-repeat: no-repeat;
-  background-position: center; 
+  background-position: center;
 }
 
 .blank-msg {
@@ -281,7 +287,9 @@ margin-right: 1rem;
 
 @media (min-width: 600px) {
   .blank-msg,
-  .blank-msg-img { font-size: 2rem; }
+  .blank-msg-img {
+    font-size: 2rem;
+  }
 }
 
 /* <--- ADD ITEM INTERFACE STYLES ---> */
@@ -302,7 +310,7 @@ margin-right: 1rem;
   background: white;
   cursor: pointer;
   transition: all 0.3sec ease;
-  }
+}
 
 .fa-plus-circle {
   font-size: 180%;
@@ -336,5 +344,5 @@ margin-right: 1rem;
 }
 
 .delete-item-button {
-margin-right: 1rem;
+  margin-right: 1rem;
 }
